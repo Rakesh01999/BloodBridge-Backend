@@ -20,7 +20,9 @@ app.use(cookieParser())
 // app.use(express.urlencoded())
 
 // const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.f8w8siu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.f8w8siu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.uuibjb3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -33,7 +35,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const userCollection = client.db('MangoMartDB').collection('users')
+    const userCollection = client.db('BloodBridgeDB').collection('users')
     // const mobileCollection = client.db('accountDB').collection('mobile')
     // const surveyorCollection = client.db('accountDB').collection('surveyor')
     // const reportCollection = client.db('accountDB').collection('report')
@@ -47,8 +49,8 @@ async function run() {
       if (existingUser) {
         return res.send({ message: 'user already exists' })
       }
-      const cartItem = req.body;
-      const result = await userCollection.insertOne(cartItem)
+      const newUser = req.body;
+      const result = await userCollection.insertOne(newUser)
       res.send(result)
     })
 
@@ -68,10 +70,10 @@ async function run() {
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
-  res.send('MangoMart is running');
+  res.send('BloodBridge is running');
 })
 
 app.listen(port, () => {
-  console.log(`MangoMart is running on port ${port}`);
+  console.log(`BloodBridge is running on port ${port}`);
 })
 

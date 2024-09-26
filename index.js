@@ -52,6 +52,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/information1/:email",async(req,res)=>{
+       const email = req.params.email
+       const query = { email: email };
+       const existingUser = await informationCollection.find(query).toArray(); 
+       res.send(existingUser)
+    })
+
     app.post("/information", async (req, res) => {
       const informations = req.body;
       const result = await informationCollection.insertOne(informations);

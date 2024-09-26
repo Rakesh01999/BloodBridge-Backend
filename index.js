@@ -33,8 +33,8 @@ async function run() {
     const userCollection = client.db('BloodBridgeDB').collection('users')
     const informationCollection = client.db('BloodBridgeDB').collection('information')
     const BloodGroupsCollection = client.db('BloodBridgeDB').collection('BloodGroups')
-  
-    app.post('/users', async(req, res) => {
+
+    app.post('/users', async (req, res) => {
       const user = req.body;
       const query = { email: user.email }
       const existingUser = await userCollection.findOne(query)
@@ -46,32 +46,42 @@ async function run() {
       res.send(result)
     })
 
-    app.get('/users', async(req, res) => {
+    app.get('/users', async (req, res) => {
       const result = await userCollection.find().toArray();
       res.send(result)
     })
 
-    app.post('/information',async(req,res)=>{
-        const informations = req.body
-        const result = await informationCollection.insertOne(informations)
-        res.send(result) 
-     })
-     app.get('/information', async(req, res) => {
+    app.post('/information', async (req, res) => {
+      const informations = req.body
+      const result = await informationCollection.insertOne(informations)
+      res.send(result)
+    })
+
+    app.get('/information', async (req, res) => {
       const result = await informationCollection.find().toArray();
       res.send(result)
     })
 
-    
-      // ----- Blood Groups --------
-      app.get('/bloodGroups', async(req, res) => {
-        const result = await BloodGroupsCollection.find().toArray();
-        res.send(result)
-      })    
+    // ---------- Donation Request -------
+    app.get('/information/:email', async (req, res) => {
+      const query = { email: req.params.email }
+      // if (req.params.email !== req.decoded.email) {
+      //     return res.status(403).send({ message: 'forbidden access' });
+      // }
+      const result = await informationCollection.find(query).toArray();
+      res.send(result);
+    })
+
+    // ----- Blood Groups --------
+    app.get('/bloodGroups', async (req, res) => {
+      const result = await BloodGroupsCollection.find().toArray();
+      res.send(result)
+    })
 
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
-    
+
   }
 }
 run().catch(console.dir);

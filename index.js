@@ -11,15 +11,11 @@ const { default: axios } = require('axios');
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'http://localhost:5000/'
   ],
   credentials: true
 }))
 app.use(express.json())
 app.use(cookieParser())
-// app.use(express.urlencoded())
-
-// const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.f8w8siu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(uri, {
   serverApi: {
@@ -54,7 +50,7 @@ async function run() {
 
     app.get('/users', async (req, res) => {
       const result = await userCollection.find().toArray();
-      res.send(result);
+      res.send(result)
     })
 
     // Send a ping to confirm a successful connection

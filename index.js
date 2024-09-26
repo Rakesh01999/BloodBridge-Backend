@@ -32,6 +32,7 @@ async function run() {
   try {
     const userCollection = client.db('BloodBridgeDB').collection('users')
     const informationCollection = client.db('BloodBridgeDB').collection('information')
+    const BloodGroupsCollection = client.db('BloodBridgeDB').collection('BloodGroups')
   
     app.post('/users', async(req, res) => {
       const user = req.body;
@@ -61,7 +62,11 @@ async function run() {
     })
 
     
-    
+      // ----- Blood Groups --------
+      app.get('/bloodGroups', async(req, res) => {
+        const result = await BloodGroupsCollection.find().toArray();
+        res.send(result)
+      })    
 
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");

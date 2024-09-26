@@ -82,6 +82,13 @@ async function run() {
       res.send(result)
     })
 
+    app.get("/information1/:email",async(req,res)=>{
+      const email = req.params.email
+      const query = { email: email };
+      const existingUser = await informationCollection.find(query).toArray(); 
+      res.send(existingUser)
+   })
+
     // ---------- Donation Request -------
     app.get('/information/:email', async (req, res) => {
       const query = { email: req.params.email }
@@ -93,10 +100,26 @@ async function run() {
     })
 
     // ----- Blood Groups --------
-    app.get('/bloodGroups', async (req, res) => {
+    app.get("/bloodGroups", async (req, res) => {
       const result = await BloodGroupsCollection.find().toArray();
-      res.send(result)
-    })
+      res.send(result);
+    });
+
+    app.patch("/bloodGroups", async (req, res) => {
+      const { bloodgroup, quantity } = req.body;
+      const query = { bloodGroup: bloodgroup };
+      let amount = parseInt(quantity);
+      console.log(bloodgroup, quantity);
+
+      const updateDoc = {
+        $inc: {
+          bloodQuantity: amount,
+        },
+      };
+
+      const result = await BloodGroupsCollection.updateOne(query, updateDoc);
+      res.send(result);
+    });
 
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -113,4 +136,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`BloodBridge is running on port ${port}`);
 })
-

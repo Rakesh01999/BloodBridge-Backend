@@ -62,11 +62,28 @@ async function run() {
     })
 
     
-      // ----- Blood Groups --------
       app.get('/bloodGroups', async(req, res) => {
         const result = await BloodGroupsCollection.find().toArray();
         res.send(result)
-      })    
+      })   
+      
+      app.patch('/bloodGroups',async(req,res)=>{
+         const {bloodgroup,quantity} = req.body
+         const query = {bloodGroup: bloodgroup}
+         let amount = parseInt(quantity)
+         console.log(bloodgroup,quantity);
+         
+         const updateDoc = {
+           $inc:{
+            bloodQuantity:amount
+           }
+         }
+
+         const result = await BloodGroupsCollection.updateOne(query,updateDoc)
+         res.send(result)
+
+
+      })
 
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");

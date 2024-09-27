@@ -132,6 +132,22 @@ async function run() {
       res.send(result);
     });
 
+    app.patch("/bloodGroups1", async (req, res) => {
+      const { bloodgroup, Acc_quantity } = req.body;
+      const query = { bloodGroup: bloodgroup };
+      let amount = parseInt(Acc_quantity);
+      console.log(bloodgroup, Acc_quantity);
+
+      const updateDoc = {
+        $inc: {
+          bloodQuantity: -amount,
+        },
+      };
+
+      const result = await BloodGroupsCollection.updateOne(query, updateDoc);
+      res.send(result);
+    });
+    
     app.patch("/bloodGroups", async (req, res) => {
       const { bloodgroup, quantity } = req.body;
       const query = { bloodGroup: bloodgroup };
@@ -148,6 +164,7 @@ async function run() {
       res.send(result);
     });
 
+    
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {

@@ -82,6 +82,33 @@ async function run() {
       res.send(result)
     })
 
+    // ------- Approving Donation Request Status --------
+    app.patch('/information/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          status: 'approved'
+        }
+      }
+      const result = await informationCollection.updateOne(filter, updatedDoc);
+      res.send(result);
+    })
+    app.patch('/informationRej/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          status: 'rejected'
+        }
+      }
+      const result = await informationCollection.updateOne(filter, updatedDoc);
+      res.send(result);
+    })
+
+
+    // ------
+
     app.get("/information1/:email",async(req,res)=>{
       const email = req.params.email
       const query = { email: email };

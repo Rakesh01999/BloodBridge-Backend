@@ -10,7 +10,7 @@ const cors = require('cors')
 const { default: axios } = require('axios');
 app.use(cors({
   origin: [
-    'http://localhost:5173',
+    'http://localhost:5173','https://bloodbridge-bloodbank.web.app','https://bloodbridge-bloodbank.firebaseapp.com'
   ],
   credentials: true
 }))
@@ -136,7 +136,7 @@ async function run() {
       const { bloodgroup, Acc_quantity } = req.body;
       const query = { bloodGroup: bloodgroup };
       let amount = parseInt(Acc_quantity);
-      console.log(bloodgroup, Acc_quantity);
+      // console.log(bloodgroup, Acc_quantity);
 
       const updateDoc = {
         $inc: {
@@ -152,7 +152,7 @@ async function run() {
       const { bloodgroup, quantity } = req.body;
       const query = { bloodGroup: bloodgroup };
       let amount = parseInt(quantity);
-      console.log(bloodgroup, quantity);
+      // console.log(bloodgroup, quantity);
 
       const updateDoc = {
         $inc: {
@@ -165,7 +165,7 @@ async function run() {
     });
 
     
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
 
